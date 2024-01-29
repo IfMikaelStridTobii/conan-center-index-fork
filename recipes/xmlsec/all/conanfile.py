@@ -130,6 +130,11 @@ class XmlSecConan(ConanFile):
             deps.generate()
 
     def build(self):
+        if self.settings.arch == "wasm":
+            replace_in_file(
+                self, os.path.join(self.source_folder, "src", "openssl", "x509.c"),
+                "       BN_print_fp(output, bn);", ""
+            )
         if is_msvc(self):
             # Configure step to generate Makefile.msvc
             deps_includedirs = []
